@@ -1,7 +1,6 @@
 import React,{Component} from 'react';
 import {Table} from 'react-bootstrap';
 
-import {Modal, Row, Col, Form} from 'react-bootstrap';
 
 
 import {Button,ButtonToolbar} from 'react-bootstrap';
@@ -17,13 +16,7 @@ export class User extends Component{
     }
 
 
-    componentDidMount(){
-        fetch(process.env.REACT_APP_TEST+'group/')
-        .then(response=>response.json())
-        .then(data=>{
-            this.setState({groups:data});
-        });
-    }
+    
 
     refreshList(){
         fetch(process.env.REACT_APP_TEST+'user/')
@@ -59,7 +52,7 @@ export class User extends Component{
     }
     
 
-    render(){
+    render(){      
         // bизменить названия под мою бд и сделать кнопки для edit, как треша?) Ты молодец)
         //треша - зоебись)
         const {groups, users, userid, username, user_group_id, user_data_of_creating} = this.state; 

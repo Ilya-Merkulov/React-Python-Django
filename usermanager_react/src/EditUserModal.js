@@ -28,8 +28,7 @@ export class EditUserModal extends Component{
             body:JSON.stringify({
                 id:event.target.id.value,
                 UserName:event.target.UserName.value,
-                GroupId:event.target.GroupId.value,
-                DateOfCreating:event.target.DateOfCreating.value
+                GroupId:event.target.GroupId.value              
             })
         })
         .then(res=>res.json())
@@ -83,18 +82,6 @@ centered
                             <option key={group.id} value={group.id}>{group.GroupName}</option>)}
                         </Form.Control>
                     </Form.Group>
-
-                    <Form.Group controlId="DateOfCreating" >
-                        <Form.Label>Date Of Creating</Form.Label>
-                        <Form.Control 
-                        type="date"
-                        name="DateOfCreating"
-                        required
-                        placeholder="DateOfCreating"
-                        defaultValue={this.props.user_data_of_creating}
-                        />  
-                    </Form.Group>
-                 
 
                     <Form.Group>
                         <Button variant="primary" type="submit">

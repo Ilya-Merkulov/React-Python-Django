@@ -1,6 +1,7 @@
 import React,{Component} from 'react';
 //import moment from "moment";
 import {Modal,Button, Row, Col, Form} from 'react-bootstrap';
+import { format, compareAsc } from 'date-fns'
 
 
 
@@ -34,7 +35,7 @@ export class AddUserModal extends Component{
                 id:null,
                 UserName:event.target.UserName.value,
                 GroupId:event.target.GroupId.value,
-                DateOfCreating:event.target.DateOfCreating.value 
+                DateOfCreating:format(new Date(), 'yyyy/MM/dd/')
             })
         })
         .then(res=>res.json())
@@ -80,17 +81,7 @@ centered
                             <option key={group.id} value={group.id}>{group.GroupName}</option>)}
                         </Form.Control>
 
-                    </Form.Group>
-
-                    <Form.Group controlId="DateOfCreating">
-                        <Form.Label>Date Of Creating</Form.Label>
-                        <Form.Control 
-                        type="date"
-                        name="DateOfCreating"
-                        required
-                        placeholder="DateOfCreating"
-                        />  
-                    </Form.Group>
+                    </Form.Group>                   
                  
 
                     <Form.Group>
