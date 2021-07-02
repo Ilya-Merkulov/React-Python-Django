@@ -1,5 +1,6 @@
 import React,{Component} from 'react';
 import {Table} from 'react-bootstrap';
+
 import {Modal, Row, Col, Form} from 'react-bootstrap';
 
 
@@ -82,7 +83,7 @@ export class User extends Component{
                                 <td>{user.id}</td>
                                 <td>{user.UserName}</td>
                                 <td>                                   
-                                    {groups.find(group => group.id == user.GroupId).GroupName}                                                             
+                                    {user.GroupId}                                                             
                                 </td>   
                                 <td>{user.DateOfCreating}</td>                      
                                 <td>
