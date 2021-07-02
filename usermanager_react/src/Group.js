@@ -52,8 +52,6 @@ export class Group extends Component{
     
 
     render(){
-        // bизменить названия под мою бд и сделать кнопки для edit, как треша?) Ты молодец)
-        //треша - зоебись)
         const {users, groups, groupid, groupname, groupdescription} = this.state; 
         let addModalClose=()=>this.setState({addModalShow:false});
         let editModalClose=()=>this.setState({editModalShow:false});
