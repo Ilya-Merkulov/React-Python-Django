@@ -53,8 +53,6 @@ export class User extends Component{
     
 
     render(){      
-        // bизменить названия под мою бд и сделать кнопки для edit, как треша?) Ты молодец)
-        //треша - зоебись)
         const {groups, users, userid, username, user_group_id, user_data_of_creating} = this.state; 
         let addModalClose=()=>this.setState({addModalShow:false});
         let editModalClose=()=>this.setState({editModalShow:false});
@@ -76,7 +74,7 @@ export class User extends Component{
                                 <td>{user.id}</td>
                                 <td>{user.UserName}</td>
                                 <td>                                   
-                                    {user.GroupId}                                                             
+                                    {user.GroupId}                                                  
                                 </td>   
                                 <td>{user.DateOfCreating}</td>                      
                                 <td>
