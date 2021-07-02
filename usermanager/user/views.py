@@ -37,7 +37,7 @@ def group(request, id = 0):
         return JsonResponse('Failed to update Group!!!', safe=False)
 
     elif request.method == "DELETE":
-        group = Groups.object.get(id=id)
+        group = Groups.objects.get(id=id)
         group.delete()
         return JsonResponse('Delete!!', safe=False)
 
