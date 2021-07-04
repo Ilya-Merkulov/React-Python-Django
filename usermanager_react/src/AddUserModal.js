@@ -2,33 +2,15 @@ import React,{Component} from 'react';
 import {Modal,Button, Row, Col, Form} from 'react-bootstrap';
 import { format, compareAsc } from 'date-fns'
 
-
-
-
 export class AddUserModal extends Component{
-    constructor(props){
-        super(props);
-        this.state={groups:[]}
-        this.handleSubmit=this.handleSubmit.bind(this);
-    }
-    
-
-
-    componentDidMount(){
-        fetch(process.env.REACT_APP_TEST+'group/')
-        .then(response=>response.json())
-        .then(data=>{
-            this.setState({groups:data});
-        });
-    }
-
-    handleSubmit(event){
+  
+    handleSubmit = (event) => {
         event.preventDefault();
         fetch(process.env.REACT_APP_TEST+'user/',{
             method:'POST',
             headers:{
-                'Accept':'application/json',
-                'Content-Type':'application/json'
+                Accept:'application/json',
+                'Content-Type':'application/json',
             },
             body:JSON.stringify({
                 id:null,
@@ -40,6 +22,7 @@ export class AddUserModal extends Component{
         .then(res=>res.json())
         .then((result)=>{
             alert(result);
+            this.props.fetchUsers();
         },
         (error)=>{
             alert('Failed');
@@ -76,8 +59,11 @@ centered
                         <Form.Label>User Group</Form.Label>   
 
                         <Form.Control as="select">
-                        {this.state.groups.map(group=>
-                            <option key={group.id} value={group.id}>{group.GroupName}</option>)}
+                        {this.props.groups.map((group) => (
+                        <option key={group.id} value={group.id}>
+                          {group.GroupName}
+                        </option>
+                      ))}
                         </Form.Control>
 
                     </Form.Group>                   

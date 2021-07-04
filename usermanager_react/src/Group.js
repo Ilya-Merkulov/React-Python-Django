@@ -1,60 +1,65 @@
 import React,{Component} from 'react';
 import {Table} from 'react-bootstrap';
 
-
 import {Button,ButtonToolbar} from 'react-bootstrap';
 import {AddGroupModal} from './AddGroupModal';
 import {EditGroupModal} from './EditGroupModal';
 
-
 export class Group extends Component{
 
-    constructor(props){
-        super(props);
-        this.state={groups:[],users:[], addModalShow:false, editModalShow:false}
-    }
+    state = {
+        users: [],
+        groups: [],
+        addModalShow: false,
+        editModalShow: false
+      };
 
-    refreshList(){
-        fetch(process.env.REACT_APP_TEST+'group')
-        .then(response=>response.json())
-        .then(data=>{
-            this.setState({groups:data});
-        });
-        fetch(process.env.REACT_APP_TEST+'user/')
-        .then(response=>response.json())
-        .then(data=>{
-            this.setState({users:data});
-        });
-    }
+      fetchUsers = () => {
+        fetch(process.env.REACT_APP_TEST + "user/")
+          .then(response => response.json())
+          .then(data => {
+            this.setState({ users: data });
+          });
+      };
+    
+      fetchGroups = () => {
+        fetch(process.env.REACT_APP_TEST + "group/")
+          .then(response => response.json())
+          .then(data => {
+            this.setState({ groups: data });
+          });
+      };
 
-    componentDidMount(){
-        this.refreshList();
-    }
+      componentDidMount() {
+        this.fetchUsers();
+        this.fetchGroups();
+      }
 
-    componentDidUpdate(){
-        this.refreshList();
-    }
 
     deleteGroup(users, groupid){
-        if(users.find(user=> user.GroupId == groupid)){ 
+        if(users.find(user=> user.GroupId === groupid)){ 
             window.alert('You cannon do it. Group has mambers')    
             return 0
         }
-        if(window.confirm('Are you sure?')){
-            fetch(process.env.REACT_APP_TEST+'group/'+groupid,{
-                method:'DELETE',
-                header:{'Accept':'application/json',
-            'Content-Type':'application/json'}
-            })
-        }
+        if (window.confirm("Are you sure?")) {
+            fetch(process.env.REACT_APP_TEST + "group/" + groupid, {
+              method: "DELETE",
+              header: {
+                  Accept: "application/json",
+                  "Content-Type": "application/json"
+              }
+            }).then(() => {
+              this.fetchGroups();
+            });
+          }
 
     }
     
+    addModalClose = () => this.setState({ addModalShow: false });
+    editModalClose = () => this.setState({ editModalShow: false });
 
     render(){
         const {users, groups, groupid, groupname, groupdescription} = this.state; 
-        let addModalClose=()=>this.setState({addModalShow:false});
-        let editModalClose=()=>this.setState({editModalShow:false});
         return(
             <div>
                 <Table className="mt-4" striped bordered hover size="sm">
@@ -86,11 +91,14 @@ export class Group extends Component{
                                             Delete
                                         </Button>
 
-                                    <EditGroupModal show={this.state.editModalShow}
-                                    onHide={editModalClose}
+                                    <EditGroupModal 
+                                    show={this.state.editModalShow}
+                                    onHide={this.editModalClose}
                                     groupid={groupid}
                                     groupname={groupname}
-                                    groupdescription={groupdescription}/>
+                                    groupdescription={groupdescription}
+                                    fetchGroups={this.fetchGroups}
+                                    users={users}/>
                                 </ButtonToolbar>
                                     
                                 </td>
@@ -104,8 +112,11 @@ export class Group extends Component{
                     onClick={()=>this.setState({addModalShow:true})}>
                     Add Group</Button>
 
-                    <AddGroupModal show={this.state.addModalShow}
-                    onHide={addModalClose}/>
+                    <AddGroupModal 
+                    show={this.state.addModalShow}
+                    onHide={this.addModalClose}
+                    fetchGroups={this.fetchGroups}
+                    users={users}/>
                     </ButtonToolbar>
 
                

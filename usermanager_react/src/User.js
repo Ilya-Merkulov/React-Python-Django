@@ -1,61 +1,59 @@
-import React,{Component} from 'react';
-import {Table} from 'react-bootstrap';
+import React, { Component } from "react";
+import { Table } from "react-bootstrap";
 
+import { Button, ButtonToolbar } from "react-bootstrap";
+import { AddUserModal } from "./AddUserModal";
+import { EditUserModal } from "./EditUserModal";
 
+export class User extends Component {
+    state = {
+      users: [],
+      groups: [],
+      addModalShow: false,
+      editModalShow: false
+    };
 
-import {Button,ButtonToolbar} from 'react-bootstrap';
-import {AddUserModal} from './AddUserModal';
-import {EditUserModal} from './EditUserModal';
-
-
-export class User extends Component{
-
-    constructor(props){
-        super(props);
-        this.state={users:[], groups:[], addModalShow:false, editModalShow:false}
-    }
-
-
+    fetchUsers = () => {
+        fetch(process.env.REACT_APP_TEST + "user/")
+          .then(response => response.json())
+          .then(data => {
+            this.setState({ users: data });
+          });
+      };
     
-
-    refreshList(){
-        fetch(process.env.REACT_APP_TEST+'user/')
-        .then(response=>response.json())
-        .then(data=>{
-            this.setState({users:data});
-        });
-        fetch(process.env.REACT_APP_TEST+'group/')
-        .then(response=>response.json())
-        .then(data=>{
-            this.setState({groups:data});
-        });
-    }
-
-    componentDidMount(){
-        this.refreshList();
-    }
-
-    componentDidUpdate(){
-        this.refreshList();
-    }
-
-    deleteUser(userid){
+      fetchGroups = () => {
+        fetch(process.env.REACT_APP_TEST + "group/")
+          .then(response => response.json())
+          .then(data => {
+            this.setState({ groups: data });
+          });
+      };
     
-        if(window.confirm('Are you sure?')){
-            fetch(process.env.REACT_APP_TEST+'user/'+userid,{
-                method:'DELETE',
-                header:{'Accept':'application/json',
-            'Content-Type':'application/json'}
-            })
+    
+  componentDidMount() {
+    this.fetchUsers();
+    this.fetchGroups();
+  }
+
+  deleteUser(userid) {
+    if (window.confirm("Are you sure?")) {
+      fetch(process.env.REACT_APP_TEST + "user/" + userid, {
+        method: "DELETE",
+        header: {
+            Accept: "application/json",
+            "Content-Type": "application/json"
         }
-
+      }).then(() => {
+        this.fetchUsers();
+      });
     }
-    
+  }
+
+  addModalClose = () => this.setState({ addModalShow: false });
+  editModalClose = () => this.setState({ editModalShow: false });
 
     render(){      
-        const {groups, users, userid, username, user_group_id, user_data_of_creating} = this.state; 
-        let addModalClose=()=>this.setState({addModalShow:false});
-        let editModalClose=()=>this.setState({editModalShow:false});
+    const {groups, users, userid, username, user_group_id, user_data_of_creating} = this.state;
         return(
             <div>
                 <Table className="mt-4" striped bordered hover size="sm">
@@ -74,7 +72,7 @@ export class User extends Component{
                                 <td>{user.id}</td>
                                 <td>{user.UserName}</td>
                                 <td>                                   
-                                    {user.GroupId}                                                  
+                                     {groups.find(group => group.id === user.GroupId)?.GroupName}                                                
                                 </td>   
                                 <td>{user.DateOfCreating}</td>                      
                                 <td>
@@ -93,12 +91,15 @@ export class User extends Component{
                                             Delete
                                         </Button>
 
-                                    <EditUserModal show={this.state.editModalShow}
-                                    onHide={editModalClose}
+                                    <EditUserModal 
+                                    show={this.state.editModalShow}
+                                    onHide={this.editModalClose}
                                     userid={userid}
                                     username={username}
                                     user_group_id={user_group_id}
-                                    user_data_of_creating={user_data_of_creating}/>
+                                    user_data_of_creating={user_data_of_creating}
+                                    fetchUsers={this.fetchUsers}
+                                    groups={groups}/>
                                 </ButtonToolbar>
                                     
                                 </td>
@@ -112,11 +113,13 @@ export class User extends Component{
                     onClick={()=>this.setState({addModalShow:true})}>
                     Add Use</Button>
 
-                    <AddUserModal show={this.state.addModalShow}
-                    onHide={addModalClose}/>
+                    <AddUserModal 
+                     show={this.state.addModalShow}
+                     onHide={this.addModalClose}
+                    fetchUsers={this.fetchUsers}
+                    groups={groups}/>
                     </ButtonToolbar>
 
-             
             </div>
         )
     }

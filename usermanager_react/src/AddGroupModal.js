@@ -2,17 +2,13 @@ import React,{Component} from 'react';
 import {Modal,Button, Row, Col, Form} from 'react-bootstrap';
 
 export class AddGroupModal extends Component{
-    constructor(props){
-        super(props);
-        this.handleSubmit=this.handleSubmit.bind(this);
-    }
-
-    handleSubmit(event){
+ 
+    handleSubmit = (event) => {
         event.preventDefault();
         fetch(process.env.REACT_APP_TEST+'group/',{
             method:'POST',
             headers:{
-                'Accept':'application/json',
+                Accept:'application/json',
                 'Content-Type':'application/json'
             },
             body:JSON.stringify({
@@ -24,6 +20,7 @@ export class AddGroupModal extends Component{
         .then(res=>res.json())
         .then((result)=>{
             alert(result);
+            this.props.fetchGroups();
         },
         (error)=>{
             alert('Failed');
